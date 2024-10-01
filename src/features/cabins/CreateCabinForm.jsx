@@ -14,7 +14,7 @@ import FormRow from "../../ui/FormRow";
 function CreateCabinForm() {
   const { register, handleSubmit, reset, getValues, formState } = useForm();
   const { errors } = formState;
-  console.log(errors);
+
   const queryCliant = useQueryClient();
 
   const { mutate, isLoading: isCreating } = useMutation({
@@ -30,7 +30,8 @@ function CreateCabinForm() {
   });
 
   const onSubmit = (data) => {
-    mutate(data);
+    mutate({ ...data, image: data.image[0] });
+    console.log(data);
   };
   const onError = (error) => {
     console.log(error);
@@ -108,7 +109,13 @@ function CreateCabinForm() {
       </FormRow>
 
       <FormRow label="Cabin photo" errors={errors?.image?.message}>
-        <FileInput id="image" accept="image/*" />
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register("image", {
+            required: "This Field is Required",
+          })}
+        />
       </FormRow>
 
       <FormRow>
